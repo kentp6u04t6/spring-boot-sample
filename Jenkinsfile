@@ -31,6 +31,11 @@ pipeline {
         archiveArtifacts 'target/*.jar'
       }
     }
+    stage('Deploy') {
+      steps {
+        sh 'make deploy-default'
+      }
+    }
   }
   post {
     always {
