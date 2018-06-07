@@ -8,7 +8,7 @@ pipeline {
     }
     stage('test') {
       steps {
-        sh 'docker run -v `pwd`:/app -v $HOME/.m2:/root/.m2 -w /app localhost:5000/maven mvn cobertura:cobertura test'
+        sh 'docker run -v -rm `pwd`:/app -v $HOME/.m2:/root/.m2 -w /app localhost:5000/maven mvn cobertura:cobertura test'
       }
     }
     stage('report') {
@@ -36,7 +36,8 @@ pipeline {
         sh '''docker build -t localhost:5000/spring-boot-sample-prod ./
 docker push localhost:5000/spring-boot-sample-prod
 docker pull localhost:5000/spring-boot-sample-prod
-docker run -d -p 8800:8000 localhost:5000/spring-boot-sample-prod
+docker rm -f spring-boot-sample-prod
+docker run -name spring-boot-sample-prod -d -p 8800:8000 localhost:5000/spring-boot-sample-prod
 '''
       }
     }
